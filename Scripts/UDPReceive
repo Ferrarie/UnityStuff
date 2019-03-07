@@ -1,0 +1,179 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Threading;
+using System;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
+
+public class udptest : MonoBehaviour {
+
+
+    
+    Socket socket;
+    EndPoint serverEnd;
+
+    Thread connectThread;
+
+    byte[] recvData = new byte[3000];
+    int recvLen = 0;
+    string recvStr;
+
+    string dataStr;
+    object dataLock = new object();
+    bool hasDataReset = false;
+
+    string pointsStr;
+
+    void Start()
+    {
+        InitSocket();
+    }
+
+    void InitSocket()
+    {
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+        List<string> srciplist = new List<string>();
+        IPAddress[] ips = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName());  //绑定本机所有IP地址
+        for (int i = 0; i < ips.Length; i++)                                              //设定域名
+        {
+            if (ips[i].AddressFamily == AddressFamily.InterNetwork) //IPv4地址 
+            {
+                srciplist.Add(ips[i].ToString());
+            }
+        }
+
+        if (srciplist.Count > 0)
+        {
+            serverEnd = new IPEndPoint(IPAddress.Parse(srciplist[0]), 1984); ;
+
+            socket.Bind(serverEnd);
+
+            //开启一个线程连接
+            connectThread = new Thread(new ThreadStart(SocketReceive));
+            connectThread.Start();
+        }
+    }
+
+    //接收引擎信息
+    void SocketReceive()
+    {
+        while (true)
+        {
+            //Thread.Sleep(ThreadSleepTime);
+
+            try
+            {
+                recvLen = socket.ReceiveFrom(recvData, ref serverEnd);
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+
+            if (recvLen > 0)
+            {
+                recvStr = Encoding.UTF8.GetString(recvData, 0, recvLen);
+
+                lock (dataLock)
+                {
+                    dataStr = recvStr;
+
+                    hasDataReset = true;
+                }
+            }
+        }
+    }
+
+
+    string read_line(NetworkStream stream)
+    {
+        if (stream.CanRead)
+        {
+            StringBuilder sb = new StringBuilder();
+            bool is_NL2 = false;
+            bool is_NL = false;
+            do
+            {
+                char buf = (char)stream.ReadByte();
+                if (buf == '\n')
+                {
+                    if (is_NL)
+                    {
+                        is_NL2 = true;
+                    }
+                    else
+                    {
+                        is_NL = true;
+                    }
+                }
+                else
+                {
+                    is_NL = false;
+                }
+                sb.Append(buf);
+            } while (!is_NL2);
+
+            return sb.ToString();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    //连接关闭
+    void SocketQuit()
+    {
+        //关闭线程
+        if (connectThread != null)
+        {
+            Debug.Log("hhh");
+
+            connectThread.Interrupt();
+            connectThread.Abort();
+        }
+        //最后关闭socket
+        if (socket != null)
+            socket.Close();
+    }
+    void OnApplicationQuit()
+    {
+        SocketQuit();
+    }
+
+    void Update()
+    {
+        bool getdata = false;
+
+        lock(dataLock)
+        {
+            if(hasDataReset)
+            {
+                pointsStr = dataStr;
+
+                getdata = true;
+
+                hasDataReset = false;
+            }
+        }
+
+        if(getdata)
+        {
+            AnalysisTest(pointsStr);
+        }
+    }
+
+
+    void AnalysisTest(string srcstr)
+    {
+        string[] strs = srcstr.Split('|');
+
+
+
+        Debug.Log(pointsStr + "&&" + strs.Length);
+    }
+
+}
