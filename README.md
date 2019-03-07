@@ -42,5 +42,14 @@ Scene View:
 
 
 # 3. Get Inspector Rotation value
+
 //获取Inspector上显示Rotaion的值
+
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/GetInspectorRotation.png)
+
+# 4. MyDebug
+//基于OnGUI()，把Debug的信息输出到屏幕上
+
+![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/MyDebug.png)
+
+
