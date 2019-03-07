@@ -2,7 +2,7 @@
 Script tools collect from internet
 
 #1. 2D Bird Fly Path
-//2D模拟鸟类飞行，不考虑扑扇事件
+//2D模拟鸟类飞行路径
 
     Vector3[] FlyPath(int length, Vector3 start, Vector3 end)
     {
