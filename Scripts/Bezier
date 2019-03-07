@@ -1,0 +1,92 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Bezier : MonoBehaviour
+{
+    enum BezierDemension
+    {
+        two,
+        three
+    }
+    [SerializeField]
+    BezierDemension bezierDemension = BezierDemension.two;
+
+    List<Vector3> Points = new List<Vector3>();
+
+    [SerializeField]
+    List<Transform> Game_Trans;
+
+    /// <summary>
+    /// 二阶贝塞尔曲线
+    /// </summary>
+    void SecondOrder()
+    {
+        Points = new List<Vector3>();
+        if (Game_Trans.Count == 3)
+        {
+            for (int i = 0; i < 200; i++)//for循环计算200个点，
+            {
+                Vector3 v1 = Vector3.Lerp(Game_Trans[0].position, Game_Trans[1].position, i * 0.01f);//注意：这里差值运算时间t必须相同
+                Vector3 v2 = Vector3.Lerp(Game_Trans[1].position, Game_Trans[2].position, i * 0.01f);
+
+                var find = Vector3.Lerp(v1, v2, i * 0.01f);
+                Points.Add(find);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Out of index");
+        }
+
+    }
+
+    /// <summary>
+    /// 三阶贝塞尔曲线
+    /// </summary>
+    void ThirdOrder()
+    {
+        Points = new List<Vector3>();
+        if (Game_Trans.Count == 4)
+        {
+            for (int i = 0; i < 200; i++)//for循环计算200个点，
+            {
+                Vector3 v1 = Vector3.Lerp(Game_Trans[0].position, Game_Trans[1].position, i * 0.01f);//注意：这里差值运算时间t必须相同
+                Vector3 v2 = Vector3.Lerp(Game_Trans[1].position, Game_Trans[2].position, i * 0.01f);
+                Vector3 v3 = Vector3.Lerp(Game_Trans[2].position, Game_Trans[3].position, i * 0.01f);
+
+                var v1_1 = Vector3.Lerp(v1, v2, i * 0.01f);
+                var v1_2 = Vector3.Lerp(v2, v3, i * 0.01f);
+
+                var find = Vector3.Lerp(v1_1, v1_2, i * 0.01f);
+                Points.Add(find);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Out of index");
+        }
+
+    }
+    //4阶5阶同理
+
+    void OnDrawGizmos()
+    {
+        switch (bezierDemension)
+        {
+            case BezierDemension.two:
+                SecondOrder();
+                break;
+            case BezierDemension.three:
+                ThirdOrder();
+                break;
+            default:
+                break;
+        }
+
+        Gizmos.color = Color.yellow;
+        for (int i = 0; i < Points.Count - 1; i++)
+        {
+            Gizmos.DrawLine(Points[i], Points[i + 1]);
+        }
+    }
+}
