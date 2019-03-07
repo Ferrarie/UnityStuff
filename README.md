@@ -29,8 +29,8 @@ Here is points with " FlyPath(50, start, end); "
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/BirdFlyPath.png)
 
 # 2. Debuge UI Line
-//在编辑器模式下，显示所有(包括图片隐藏和组建未激活)的UI外框。有效防止傻逼美工或者场景设计师把图片隐藏，造成不必要的性能消耗
-
+在编辑器模式下，显示所有(包括图片隐藏和组建未激活)的UI外框。有效防止傻逼美工或者场景设计师把图片隐藏，造成不必要的性能消耗
+refer to ("sorry,I forgot");
 Game View:
 
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/DebugUILine_GameView.png)
@@ -42,32 +42,35 @@ Scene View:
 
 
 # 3. Get Inspector Rotation value
-
-//获取Inspector上显示Rotaion的值
+refer to https://blog.csdn.net/qq_34444468/article/details/83929841
+获取Inspector上显示Rotaion的值
 
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/GetInspectorRotation.png)
 
 # 4. MyDebug
-//基于OnGUI()，把Debug的信息输出到屏幕上
+refer to https://blog.csdn.net/abcdtty/article/details/18862265
+基于OnGUI()，把Debug的信息输出到屏幕上
 
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/MyDebug.png)
 
 # 5. SmoothFPS
-//Copy From Unity Offical Visual Effect Graph Samples
-//Show Smooth FPS
-//no Image
+Copy From Unity Offical Visual Effect Graph Samples
+Show Smooth FPS
+no Image
 
 # 6. UDP Receive Base on Socket Class
-//简单的开启线程，绑定ipv4和端口，接收UDP信息
+简单的开启线程，绑定ipv4和端口，接收UDP信息
 
 # 7. Anti Roguish Windows
-//防止广告弹窗突然挡住程序,using user32.dll which can find in C:\Windows\System32
+dll APi refer to http://www.webtropy.com/articles/art9-2.asp?lib=user32.dll
+&& http://www.pinvoke.net/
+防止广告弹窗突然挡住程序,using user32.dll which can find in C:\Windows\System32
 
 //Problem unsolve: Can't hide Windows Taskbar(任务栏) when press Alt+Tab.
 
 # 8.Bezier
-//create Bezier in 2D or 3D 
-
+create Bezier in 2D or 3D 
+refer to https://blog.csdn.net/w6316485/article/details/53215380?utm_source=blogxgwz0
 ![image](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/Bezier_2Demension.gif)
 
 
