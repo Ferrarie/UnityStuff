@@ -30,7 +30,10 @@ Here is points with " FlyPath(50, start, end); "
 
 # 2. Debuge UI Line
 //在编辑器模式下，显示所有(包括图片隐藏和组建未激活)的UI外框。有效防止傻逼美工或者场景设计师把图片隐藏，造成不必要的性能消耗
+
 Game View:
+
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/DebugUILine_GameView.png)
 Scene View:
+
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/DebugUILine_SceneView.png)
