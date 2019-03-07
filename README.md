@@ -1,6 +1,6 @@
 # UnityStuff
 Script tools collect from internet
-从网上和自己收集的代码工具
+从网上收集的代码工具
 
 # 1. 2D Bird Fly Path
 //2D模拟鸟类飞行路径
@@ -39,3 +39,8 @@ Game View:
 Scene View:
 
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/DebugUILine_SceneView.png)
+
+
+# 3. Get Inspector Rotation value
+//获取Inspector上显示Rotaion的值
+![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/GetInspectorRotation.png)
