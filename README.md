@@ -52,4 +52,15 @@ Scene View:
 
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/MyDebug.png)
 
+# 5. SmoothFPS
+//Copy From Unity Offical Visual Effect Graph Samples
+//Show Smooth FPS
+//[image](null)
+
+# 6. UDP Receive Base on Socket Class
+//简单的开启线程，绑定ipv4和端口，接收UDP信息
+
+# 7. Anti Roguish Windows
+//防止广告弹窗突然挡住程序
+//Problem unsolve: Can't hide Windows Taskbar(任务栏) when press Alt+Tab.
 
