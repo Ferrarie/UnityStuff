@@ -1,0 +1,32 @@
+    void UpdateDebug()
+    {
+        if (FramerateText == null)
+            return;
+
+        FramerateText.text =  (1.0f / GetSmoothDeltaTime()).ToString("F2");
+    }
+
+    Queue<float> deltaTimeSamples = new Queue<float>();
+    const float smoothDeltaTimePeriod = 0.5f;
+
+    float GetSmoothDeltaTime()
+    {
+        float time = Time.unscaledTime;
+        deltaTimeSamples.Enqueue(time);//把每一帧记录的运行时间记录在末端
+
+        if(deltaTimeSamples.Count > 1)
+        {
+            float startTime = deltaTimeSamples.Peek();//获取队列头部运行的时间
+            float delta = time - startTime;
+
+            float smoothDelta = delta / deltaTimeSamples.Count;
+
+            if (delta > smoothDeltaTimePeriod){
+                deltaTimeSamples.Dequeue();
+            }
+
+            return smoothDelta;
+        }
+        else
+            return Time.unscaledDeltaTime;
+    }
