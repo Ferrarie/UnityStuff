@@ -1,0 +1,23 @@
+ using System.Runtime.InteropServices;
+using System;
+
+
+#region 强制窗口前置
+    [DllImport("user32.dll")]
+    static extern IntPtr SetWindowLong(IntPtr hwnd, int _nIndex, int dwNewLong);
+    [DllImport("user32.dll")]
+    static extern bool SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+    [DllImport("user32.dll")]
+    static extern IntPtr GetForegroundWindow();
+    const uint SWP_SHOWWINDOW = 0x0040;
+    const int GWL_STYLE = -16;
+    const int WS_BORDER = 1;
+    #endregion
+
+void  Anti_RoguishWindow(){
+
+        //强制最前
+        //SetWindowLong(GetForegroundWindow(), GWL_STYLE, WS_BORDER);
+        //bool result = SetWindowPos(GetForegroundWindow(), -1, 0, 0, (int)Screen.width, (int)Screen.height, SWP_SHOWWINDOW);
+        //UnityEngine.Debug.Log("强制窗口最前"+result);
+}
