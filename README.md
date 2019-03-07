@@ -55,7 +55,7 @@ Scene View:
 # 5. SmoothFPS
 //Copy From Unity Offical Visual Effect Graph Samples
 //Show Smooth FPS
-//[image](null)
+//no Image
 
 # 6. UDP Receive Base on Socket Class
 //简单的开启线程，绑定ipv4和端口，接收UDP信息
@@ -64,4 +64,10 @@ Scene View:
 //防止广告弹窗突然挡住程序,using user32.dll which can find in C:\Windows\System32
 
 //Problem unsolve: Can't hide Windows Taskbar(任务栏) when press Alt+Tab.
+
+# 8.Bezier
+//create Bezier in 2D or 3D 
+
+![image](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/Bezier_2Demension.gif)
+
 
