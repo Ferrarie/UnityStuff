@@ -1,6 +1,8 @@
 # UnityStuff  
 Script tools collect from internet  
 从网上收集的代码工具  
+Scripts are placed in Unity https://github.com/Ferrarie/UnityStuff/tree/master/Scripts  
+源码全丢进Scripts文件夹里
 
 # 1. 2D Bird Fly Path  
 2D模拟鸟类飞行路径  
