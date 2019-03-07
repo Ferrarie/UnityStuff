@@ -4,7 +4,7 @@ Script tools collect from internet
 #1. 2D Bird Fly Path
 //2D模拟鸟类飞行，不考虑扑扇事件
 
- Vector3[] FlyPath(int length, Vector3 start, Vector3 end)
+    Vector3[] FlyPath(int length, Vector3 start, Vector3 end)
     {
         Vector3[] vector3s = new Vector3[length];
         float dis = Vector3.Distance(start, end);
