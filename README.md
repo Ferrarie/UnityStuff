@@ -1,7 +1,7 @@
 # UnityStuff
 Script tools collect from internet
 
-#1. 2D Bird Fly Path
+# 1. 2D Bird Fly Path
 //2D模拟鸟类飞行路径
 
     Vector3[] FlyPath(int length, Vector3 start, Vector3 end)
@@ -26,3 +26,6 @@ Script tools collect from internet
     }
 Here is points with " FlyPath(50, start, end); "
 ![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/BirdFlyPath.png)
+
+# 2. Debuge UI Line
+//在编辑器模式下，显示所有(包括图片隐藏和组建未激活)的UI外框
