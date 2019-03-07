@@ -24,3 +24,5 @@ Script tools collect from internet
         }
         return vector3s;
     }
+Here is points with " FlyPath(50, start, end); "
+![imge](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/BirdFlyPath.png)
