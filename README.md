@@ -61,9 +61,11 @@ dll APi refer to http://www.webtropy.com/articles/art9-2.asp?lib=user32.dll
 && http://www.pinvoke.net/  
 防止广告弹窗突然挡住程序,using user32.dll which can find in C:\Windows\System32  
 目前有两种方式：
-(1)获取当前系统最前(焦点)的窗口句柄，设置该句柄为最前置顶；
-这种方法有种弊端，在双击打开Unity程序时，这个时候由于unity程序需要加载初始化，还没这么快运行到窗口前置功能的部分，这个时候如果打开一个窗口例如,我的电脑，那么当unity程序运行到窗口前置时，获取系统当前焦点的窗口为“我的电脑”，而并非我们预想的Unity程序窗口，运行的结果就是，程序告诉系统，把“我的电脑”窗口最大化并且前置；这功能如果用在开机自动启动多个程序的时候就很尴尬，应该换第2个方法；
-(2)通过设置窗口名称来获取句柄，设置该句柄为最前置顶；
+  (1)获取当前系统最前(焦点)的窗口句柄，设置该句柄为最前置顶；  
+  
+  这种方法有种弊端，在双击打开Unity程序时，这个时候由于unity程序需要加载初始化，还没这么快运行到窗口前置功能的部分，这个时候如果打开一个窗口例如,我的电脑，那么当unity程序运行到窗口前置时，获取系统当前焦点的窗口为“我的电脑”，而并非我们预想的Unity程序窗口，运行的结果就是，程序告诉系统，把“我的电脑”窗口最大化并且前置；这功能如果用在开机自动启动多个程序的时候就很尴尬，应该换第2个方法；  
+  
+  (2)通过设置窗口名称来获取句柄，设置该句柄为最前置顶；
 这个运行起来不会出现(1)所描述的情况，但是需要在函数参数里指定好Product Name(也就是窗口标题)，这个在Unity Player Setting 中，Player->Product Name里可以设置。。。。有人问我为什么不实时获取Product Name，这样就不用指定参数了,emmmm我试过, UnityEditor.PlayerSettings.productName,这个只能在编辑器使用，不能打包出来。打包的时候会报错不能Using UnityEditor。
 Problem unsolve: Can't hide Windows Taskbar(任务栏) when press Alt+Tab.  
 
