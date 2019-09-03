@@ -3,21 +3,134 @@ using System;
 
 
 #region 强制窗口前置
+    enum ShowWindowCommands
+    {
+        /// <summary>
+        /// Hides the window and activates another window.
+        /// </summary>
+        Hide = 0,
+        /// <summary>
+        /// Activates and displays a window. If the window is minimized or 
+        /// maximized, the system restores it to its original size and position.
+        /// An application should specify this flag when displaying the window 
+        /// for the first time.
+        /// </summary>
+        Normal = 1,
+        /// <summary>
+        /// Activates the window and displays it as a minimized window.
+        /// </summary>
+        ShowMinimized = 2,
+        /// <summary>
+        /// Maximizes the specified window.
+        /// </summary>
+        Maximize = 3, // is this the right value?
+                      /// <summary>
+                      /// Activates the window and displays it as a maximized window.
+                      /// </summary>       
+        ShowMaximized = 3,
+        /// <summary>
+        /// Displays a window in its most recent size and position. This value 
+        /// is similar to <see cref="Win32.ShowWindowCommand.Normal"/>, except 
+        /// the window is not activated.
+        /// </summary>
+        ShowNoActivate = 4,
+        /// <summary>
+        /// Activates the window and displays it in its current size and position. 
+        /// </summary>
+        Show = 5,
+        /// <summary>
+        /// Minimizes the specified window and activates the next top-level 
+        /// window in the Z order.
+        /// </summary>
+        Minimize = 6,
+        /// <summary>
+        /// Displays the window as a minimized window. This value is similar to
+        /// <see cref="Win32.ShowWindowCommand.ShowMinimized"/>, except the 
+        /// window is not activated.
+        /// </summary>
+        ShowMinNoActive = 7,
+        /// <summary>
+        /// Displays the window in its current size and position. This value is 
+        /// similar to <see cref="Win32.ShowWindowCommand.Show"/>, except the 
+        /// window is not activated.
+        /// </summary>
+        ShowNA = 8,
+        /// <summary>
+        /// Activates and displays the window. If the window is minimized or 
+        /// maximized, the system restores it to its original size and position. 
+        /// An application should specify this flag when restoring a minimized window.
+        /// </summary>
+        Restore = 9,
+        /// <summary>
+        /// Sets the show state based on the SW_* value specified in the 
+        /// STARTUPINFO structure passed to the CreateProcess function by the 
+        /// program that started the application.
+        /// </summary>
+        ShowDefault = 10,
+        /// <summary>
+        ///  <b>Windows 2000/XP:</b> Minimizes a window, even if the thread 
+        /// that owns the window is not responding. This flag should only be 
+        /// used when minimizing windows from a different thread.
+        /// </summary>
+        ForceMinimize = 11
+    }
+    //关闭窗口
+    [DllImport("user32.dll")]
+    static extern bool ShowWindowAsync(IntPtr hWnd, ShowWindowCommands showWindowCommands);
+    //获取class 或者 name
+    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
+    [DllImport("User32.dll")]
+    private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetForegroundWindow();
+
+    [DllImport("User32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("User32.dll")]
+    private static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);
+
+    [DllImport("user32.dll", EntryPoint = "GetWindowThreadProcessId")]
+    public static extern uint GetWindowThreadProcessId(IntPtr hWnd, ref uint lpdwProcessId);
+
     [DllImport("user32.dll")]
     static extern IntPtr SetWindowLong(IntPtr hwnd, int _nIndex, int dwNewLong);
     [DllImport("user32.dll")]
     static extern bool SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-    [DllImport("user32.dll")]
-    static extern IntPtr GetForegroundWindow();
     const uint SWP_SHOWWINDOW = 0x0040;
+    const uint SWP_HIDEWINDOW = 0x0080;//这个有毒
     const int GWL_STYLE = -16;
     const int WS_BORDER = 1;
-    #endregion
+#endregion
 
+//通过获取当前激活的窗口(最前的)的句柄，让该句柄的窗口前置
 void  Anti_RoguishWindow(){
 
         //强制最前
-        //SetWindowLong(GetForegroundWindow(), GWL_STYLE, WS_BORDER);
-        //bool result = SetWindowPos(GetForegroundWindow(), -1, 0, 0, (int)Screen.width, (int)Screen.height, SWP_SHOWWINDOW);
-        //UnityEngine.Debug.Log("强制窗口最前"+result);
+        SetWindowLong(GetForegroundWindow(), GWL_STYLE, WS_BORDER);
+        bool result = SetWindowPos(GetForegroundWindow(), -1, 0, 0, (int)Screen.width, (int)Screen.height, SWP_SHOWWINDOW);
+        UnityEngine.Debug.Log("强制窗口最前"+result);
+}
+
+//通过查找窗口名来获取句柄，让该句柄的窗口前置
+void Anti_RoguishWindow_By_WindowName(string ProductName){
+        string className = "UnityWndClass";
+
+        //在Unity Build Settings里的Project Settings的Product Name参数。
+        string windowName = ProductName;
+        IntPtr 目标窗口 = FindWindow(className, windowName);
+        if (目标窗口.ToInt32() == 0)
+        {
+            Debug.Log("[查找窗口失败]" + "className:" + className + " windowName:" + windowName);
+        }
+        else
+        {
+            SetWindowLong(目标窗口, GWL_STYLE, WS_BORDER); //强制最前
+            SetWindowPos(目标窗口, -1, 0, 0, ScreenWidth, ScreenHeight, SWP_SHOWWINDOW);
+        }
 }
