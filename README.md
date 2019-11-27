@@ -1,5 +1,5 @@
 # UnityStuff  
-Script tools collect from internet  
+Script tools collect from the internet  
 从网上收集的代码工具  
 Scripts are placed in Unity https://github.com/Ferrarie/UnityStuff/tree/master/Scripts  
 源码全丢进Scripts文件夹里
@@ -57,9 +57,9 @@ no Image
 简单的开启线程，绑定ipv4和端口，接收UDP信息  
 
 # 7. Anti Roguish Windows
-dll APi refer to http://www.webtropy.com/articles/art9-2.asp?lib=user32.dll  
+The Plugins API refer to http://www.webtropy.com/articles/art9-2.asp?lib=user32.dll  
 && http://www.pinvoke.net/  
-防止广告弹窗突然挡住程序,using user32.dll which can find in C:\Windows\System32  
+防止广告弹窗突然挡住程序, using user32.dll which can find in C:\Windows\System32  
 目前有两种方式：
   (1)获取当前系统最前(焦点)的窗口句柄，设置该句柄为最前置顶；  
   
@@ -68,11 +68,26 @@ dll APi refer to http://www.webtropy.com/articles/art9-2.asp?lib=user32.dll
   (2)通过设置窗口名称来获取句柄，设置该句柄为最前置顶；
   
   这个运行起来不会出现(1)所描述的情况，但是需要在函数参数里指定好Product Name(也就是窗口标题)，这个在Unity Player Setting 中，Player->Product Name里可以设置。。。。有人问我为什么不实时获取Product Name，这样就不用指定参数了,emmmm我试过, UnityEditor.PlayerSettings.productName,这个只能在编辑器使用，不能打包出来。打包的时候会报错不能Using UnityEditor。
-Problem unsolve: Can't hide Windows Taskbar(任务栏) when press Alt+Tab.  
+Problem unsolve: Can't hide Windows Taskbar(任务栏) when pressing Alt+Tab.  
 
 # 8.Bezier
 create Bezier in 2D or 3D  
 refer to https://blog.csdn.net/w6316485/article/details/53215380?utm_source=blogxgwz0  
 ![image](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/Bezier_2Demension.gif)
+
+# 9.Dark Skin For Unity 2018.4 Editor
+refer to https://www.8bitzone.com/482.html
+1. Use HxD https://mh-nexus.de/en/hxd/
+2. Search HEX 74 04 33 C0 EB 02 8B 03 48 8B 4C
+3. Change 74 to 75
+if( in_Windows_Platform)
+{
+  4. Press Ctrl+R to open regedit.exe;
+     Find HKEY_CURRENT_USER\Software\Unity Technologies\Unity Editor 5.x;
+     verify "UserSkin_h307680651"s value from 0 to 1;
+     save regedit;
+     open Unity.exe directly or with Unity Hub;
+     Done!;
+}
 
 
