@@ -90,4 +90,24 @@ if( in_Windows_Platform)
      Done!;
 }
 
+# 10.好用的类
+运行时间
+System.Diagnostics.Stopwatch sw =  new Stopwatch();
+sw.Start();
+/*
+* run code
+*/
+sw.Stop();
+Debug.Log(sw.ElapsedMilliseconds);
+
+XXXX秒数转时分
+System.TimeSpan timeSpan = new TimeSpane(0, 0, (int)total_Seconds);
+if (timeSpan.Hours > 0)
+{
+    temp = timeSpan.Hours.ToString() + ":" + timeSpan.Minutes.ToString() + ":" + timeSpan.Seconds.ToString();
+}
+else
+{
+    temp =  timeSpan.Minutes.ToString() + ":" + timeSpan.Seconds.ToString();
+}
 
