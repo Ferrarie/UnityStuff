@@ -1,92 +1,126 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bezier : MonoBehaviour
+public class BezierManager
 {
     enum BezierDemension
     {
         two,
         three
     }
-    [SerializeField]
-    BezierDemension bezierDemension = BezierDemension.two;
-
-    List<Vector3> Points = new List<Vector3>();
 
     [SerializeField]
-    List<Transform> Game_Trans;
+    private static BezierDemension bezierDemension = BezierDemension.two;
+
+    private Vector3 OriginPos, DestinationPos, FactorPos;
+
+    private static List<Vector3> Points;
+
+    public void Init()
+    {
+        Points = new List<Vector3>();
+    }
 
     /// <summary>
     /// 二阶贝塞尔曲线
     /// </summary>
-    void SecondOrder()
+    /// <param name="origin"></param>
+    /// <param name="destination"></param>
+    /// <param name="factorPos"></param>
+    /// <param name="lerpVale">范围0~1，越小计算密度越高</param>
+    /// <returns></returns>
+    public List<Vector3> Get_ListVectors(Vector3 origin, Vector3 destination, Vector3 factorPos, float lerpVale = 0.01f)
     {
-        Points = new List<Vector3>();
-        if (Game_Trans.Count == 3)
-        {
-            for (int i = 0; i < 200; i++)//for循环计算200个点，
-            {
-                Vector3 v1 = Vector3.Lerp(Game_Trans[0].position, Game_Trans[1].position, i * 0.01f);//注意：这里差值运算时间t必须相同
-                Vector3 v2 = Vector3.Lerp(Game_Trans[1].position, Game_Trans[2].position, i * 0.01f);
+        int calc_Count = Mathf.RoundToInt(1 / 0.01f);
+        Points.Clear();
 
-                var find = Vector3.Lerp(v1, v2, i * 0.01f);
-                Points.Add(find);
-            }
-        }
-        else
+        this.OriginPos = origin;
+        this.DestinationPos = destination;
+        this.FactorPos = factorPos;
+
+        for (int i = 0; i < calc_Count; i++)
         {
-            Debug.LogWarning("Out of index");
+            Vector3 v1 = Vector3.Lerp(origin, factorPos, i * lerpVale);//注意：这里差值运算时间t必须相同
+            Vector3 v2 = Vector3.Lerp(factorPos, destination, i * lerpVale);
+
+            var find = Vector3.Lerp(v1, v2, i * lerpVale);
+            Points.Add(find);
         }
 
+        return Points;
+    }
+   
+    public Vector3[] Get_Vectors(Vector3 origin, Vector3 destination, Vector3 factorPos, float lerpVale = 0.01f)
+    {
+        int calc_Count = Mathf.RoundToInt(1 / 0.01f);
+        Vector3[] vector3 = new Vector3[calc_Count];
+
+
+        this.OriginPos = origin;
+        this.DestinationPos = destination;
+        this.FactorPos = factorPos;
+
+        for (int i = 0; i < calc_Count; i++)
+        {
+            Vector3 v1 = Vector3.Lerp(origin, factorPos, i * lerpVale);//注意：这里差值运算时间t必须相同
+            Vector3 v2 = Vector3.Lerp(factorPos, destination, i * lerpVale);
+
+            vector3[i] = Vector3.Lerp(v1, v2, i * lerpVale);
+        }
+
+        return vector3;
     }
 
-    /// <summary>
-    /// 三阶贝塞尔曲线
-    /// </summary>
-    void ThirdOrder()
-    {
-        Points = new List<Vector3>();
-        if (Game_Trans.Count == 4)
-        {
-            for (int i = 0; i < 200; i++)//for循环计算200个点，
-            {
-                Vector3 v1 = Vector3.Lerp(Game_Trans[0].position, Game_Trans[1].position, i * 0.01f);//注意：这里差值运算时间t必须相同
-                Vector3 v2 = Vector3.Lerp(Game_Trans[1].position, Game_Trans[2].position, i * 0.01f);
-                Vector3 v3 = Vector3.Lerp(Game_Trans[2].position, Game_Trans[3].position, i * 0.01f);
+    ///// <summary>
+    ///// 三阶贝塞尔曲线
+    ///// </summary>
+    //void ThirdOrder()
+    //{
+    //    Points.Clear();
+    //    if (Game_Trans.Count == 4)
+    //    {
+    //        for (int i = 0; i < 200; i++)//for循环计算200个点，
+    //        {
+    //            Vector3 v1 = Vector3.Lerp(Game_Trans[0].position, Game_Trans[1].position, i * 0.01f);//注意：这里差值运算时间t必须相同
+    //            Vector3 v2 = Vector3.Lerp(Game_Trans[1].position, Game_Trans[2].position, i * 0.01f);
+    //            Vector3 v3 = Vector3.Lerp(Game_Trans[2].position, Game_Trans[3].position, i * 0.01f);
 
-                var v1_1 = Vector3.Lerp(v1, v2, i * 0.01f);
-                var v1_2 = Vector3.Lerp(v2, v3, i * 0.01f);
+    //            var v1_1 = Vector3.Lerp(v1, v2, i * 0.01f);
+    //            var v1_2 = Vector3.Lerp(v2, v3, i * 0.01f);
 
-                var find = Vector3.Lerp(v1_1, v1_2, i * 0.01f);
-                Points.Add(find);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Out of index");
-        }
+    //            var find = Vector3.Lerp(v1_1, v1_2, i * 0.01f);
+    //            Points.Add(find);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("Out of index");
+    //    }
 
-    }
+    //}
     //4阶5阶同理
 
     void OnDrawGizmos()
     {
-        switch (bezierDemension)
+        if (Points != null && Points.Count > 0)
         {
-            case BezierDemension.two:
-                SecondOrder();
-                break;
-            case BezierDemension.three:
-                ThirdOrder();
-                break;
-            default:
-                break;
-        }
+            switch (bezierDemension)
+            {
+                case BezierDemension.two:
+                    Get_ListVectors(OriginPos, DestinationPos, FactorPos);
+                    break;
+                case BezierDemension.three:
+                    //ThirdOrder();
+                    break;
+                default:
+                    break;
+            }
 
-        Gizmos.color = Color.yellow;
-        for (int i = 0; i < Points.Count - 1; i++)
-        {
-            Gizmos.DrawLine(Points[i], Points[i + 1]);
+            Gizmos.color = Color.yellow;
+            for (int i = 0; i < Points.Count - 1; i++)
+            {
+                Gizmos.DrawLine(Points[i], Points[i + 1]);
+            }
         }
     }
 }
