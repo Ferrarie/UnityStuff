@@ -1,0 +1,28 @@
+using System;
+using UnityEngine;
+
+public class SingletonBase<T> : MonoBehaviour where T : SingletonBase<T>
+{
+    public static T Instance
+    {
+        get
+        {
+            if (SingletonBase<T>._instance == null)
+            {
+                Debug.LogWarning("获取单例失败,创建单例: " + typeof(T).Name);
+                SingletonBase<T>._instance = new GameObject(typeof(T).Name).AddComponent<T>();
+            }
+            return SingletonBase<T>._instance;
+        }
+    }
+
+    public virtual void Awake()
+    {
+        if (base.GetComponent<T>() != null)
+        {
+            SingletonBase<T>._instance = base.GetComponent<T>();
+        }
+    }
+
+    protected static T _instance;
+}
