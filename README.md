@@ -94,9 +94,7 @@ if( in_Windows_Platform)
 运行时间
 System.Diagnostics.Stopwatch sw =  new Stopwatch();
 sw.Start();
-/*
-* run code
-*/
+//run code
 sw.Stop();
 Debug.Log(sw.ElapsedMilliseconds);
 
@@ -111,3 +109,5 @@ else
     temp =  timeSpan.Minutes.ToString() + ":" + timeSpan.Seconds.ToString();
 }
 
+# 10.SingleTonBase<T>
+    继承自MonoBehavior的范型单例
