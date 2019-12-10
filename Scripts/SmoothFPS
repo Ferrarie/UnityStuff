@@ -10,12 +10,14 @@ public class FPSManager : SingletonBase<FPSManager>
 
     private Queue<float> deltaTimeSamples = new Queue<float>();
     private const float smoothDeltaTimePeriod = 0.5f;
+    private string FPS = "";
 
     public override void Awake()
     {
         base.Awake();
 
         fontStyle.normal.textColor = new Color(1, 0, 1, 1);
+        fontStyle.fontSize = (int)(((float)Screen.width * 50f) / 1920f);
     }
 
     private void OnGUI()
@@ -23,10 +25,20 @@ public class FPSManager : SingletonBase<FPSManager>
         if (_instance == null)
             return;
 
-        fontStyle.fontSize = (int) (((float)Screen.width * 50f) / 1920f );
-        GUI.Label(rect, (1.0f / GetSmoothDeltaTime()).ToString("F2"), fontStyle);
+        GUI.Label(rect, FPS, fontStyle);
+    }
+    private void Update()
+    {
+        if (_instance == null)
+            return;
+
+        FPS = (1.0f / GetSmoothDeltaTime()).ToString("F2");
     }
 
+    /// <summary>
+    /// 该函数需要放到Update里面计算
+    /// </summary>
+    /// <returns></returns>
     public float GetSmoothDeltaTime()
     {
         float time = Time.unscaledTime;
