@@ -1,27 +1,46 @@
-    void UpdateDebug()
-    {
-        if (FramerateText == null)
-            return;
+using System.Collections.Generic;
+using UnityEngine;
 
-        FramerateText.text =  (1.0f / GetSmoothDeltaTime()).ToString("F2");
+public class FPSManager : SingletonBase<FPSManager>
+{
+    [SerializeField]
+    private Rect rect =  new Rect(50, 50, 200, 200);
+    [SerializeField]
+    private GUIStyle fontStyle = new GUIStyle();
+
+    private Queue<float> deltaTimeSamples = new Queue<float>();
+    private const float smoothDeltaTimePeriod = 0.5f;
+
+    public override void Awake()
+    {
+        base.Awake();
+
+        fontStyle.normal.textColor = new Color(1, 0, 1, 1);
     }
 
-    Queue<float> deltaTimeSamples = new Queue<float>();
-    const float smoothDeltaTimePeriod = 0.5f;
+    private void OnGUI()
+    {
+        if (_instance == null)
+            return;
 
-    float GetSmoothDeltaTime()
+        fontStyle.fontSize = (int) (((float)Screen.width * 50f) / 1920f );
+        GUI.Label(rect, (1.0f / GetSmoothDeltaTime()).ToString("F2"), fontStyle);
+    }
+
+    public float GetSmoothDeltaTime()
     {
         float time = Time.unscaledTime;
         deltaTimeSamples.Enqueue(time);//把每一帧记录的运行时间记录在末端
 
-        if(deltaTimeSamples.Count > 1)
+        if (deltaTimeSamples.Count > 1)
         {
             float startTime = deltaTimeSamples.Peek();//获取队列头部运行的时间
             float delta = time - startTime;
 
             float smoothDelta = delta / deltaTimeSamples.Count;
 
-            if (delta > smoothDeltaTimePeriod){
+            if (delta > smoothDeltaTimePeriod)
+            {
                 deltaTimeSamples.Dequeue();
             }
 
@@ -30,3 +49,4 @@
         else
             return Time.unscaledDeltaTime;
     }
+}
