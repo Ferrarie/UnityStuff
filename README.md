@@ -113,6 +113,8 @@ else
     继承自MonoBehavior的范型单例
     
 # 11.Black Hole Effect For UI Image, RawImage, Text
+  Learning from https://gameinstitute.qq.com/community/detail/113641
     UI的黑洞效果，利用BaseMeshEffect类，重载ModifyMesh函数，对UI的顶点进行实时偏移运算，达到黑洞效果
+   ![image](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/BlackHoleEffect.gif)
     
   
