@@ -110,11 +110,19 @@ else
 }
 
 # 10.SingleTonBase<T>
-    继承自MonoBehavior的范型单例
+继承自MonoBehavior的范型单例
     
 # 11.Black Hole Effect For UI Image, RawImage, Text
-  Learning from https://gameinstitute.qq.com/community/detail/113641
-    UI的黑洞效果，利用BaseMeshEffect类，重载ModifyMesh函数，对UI的顶点进行实时偏移运算，达到黑洞效果
-   ![image](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/BlackHoleEffect.gif)
+Learning from https://gameinstitute.qq.com/community/detail/113641
+UI的黑洞效果，利用BaseMeshEffect类，重载ModifyMesh函数，对UI的顶点进行实时偏移运算，达到黑洞效果
+需要设置的参数:
+mesh -> UI的mesh，网格数越密集，黑洞效果越显著，
+注意，如果直接用Unity 自带的Plane会有问题，因为Plane模型的坐标默认是平放，正面朝向+Y，
+所以，最好自己做一个Plane，正面朝向为-Z即可；
+trans_BlackHole -> 黑洞的Transform,可以为空物体；
+radius_BlackHole -> 黑洞半径；
+power_BlackHole -> 吸附强度；
+
+![image](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/BlackHoleEffect.gif)
     
   
