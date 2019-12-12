@@ -111,3 +111,8 @@ else
 
 # 10.SingleTonBase<T>
     继承自MonoBehavior的范型单例
+    
+# 11.Black Hole Effect For UI Image, RawImage, Text
+    UI的黑洞效果，利用BaseMeshEffect类，重载ModifyMesh函数，对UI的顶点进行实时偏移运算，达到黑洞效果
+    
+  
