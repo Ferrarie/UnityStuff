@@ -90,6 +90,8 @@ if( in_Windows_Platform)
      Done!;
 }
 
+有逆向经验可以参考这篇 https://kosro.de/unity-dark-theme/
+
 # 10.好用的类
 运行时间
 System.Diagnostics.Stopwatch sw =  new Stopwatch();
