@@ -53,8 +53,9 @@ Copy From Unity Offical Visual Effect Graph Samples
 Show Smooth FPS  
 no Image  
 
-# 6. UDP Receive Base on Socket Class
+# 6. UDP Receive Base on Socket Class 我u你奶奶个DP，直接上Mirror插件
 简单的开启线程，绑定ipv4和端口，接收UDP信息  
+我u你奶奶个DP，直接上Mirror插件:https://github.com/vis2k/Mirror
 
 # 7. Anti Roguish Windows
 The Plugins API refer to http://www.webtropy.com/articles/art9-2.asp?lib=user32.dll  
