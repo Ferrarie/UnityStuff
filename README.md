@@ -53,9 +53,9 @@ Copy From Unity Offical Visual Effect Graph Samples
 Show Smooth FPS  
 no Image  
 
-# 6. UDP Receive Base on Socket Class 我u你奶奶个DP，直接上Mirror插件
+# 6. UDP Receive Base on Socket Class,直接上Mirror插件
 简单的开启线程，绑定ipv4和端口，接收UDP信息  
-我u你奶奶个DP，直接上Mirror插件:https://github.com/vis2k/Mirror
+直接上Mirror插件:https://github.com/vis2k/Mirror
 
 # 7. Anti Roguish Windows
 The Plugins API refer to http://www.webtropy.com/articles/art9-2.asp?lib=user32.dll  
@@ -92,6 +92,15 @@ if( in_Windows_Platform)
 }
 
 有逆向经验可以参考这篇 https://kosro.de/unity-dark-theme/
+1. Download x64dbg
+2. Create a copy of Unity.exe
+3. Open the original .exe in x64dbg
+4. Switch to the "Symbols" tab and select the "unity.exe" Module
+5. Search for the Symbol "getskinidx" and double click the highlighted result
+6. Find the highlighted lines (might start with "jne" or "je")
+Replace the "je" with "jne" or the other way around, depending on your Unity version
+7. Create a patch using the highlighted icon and choose the copy of the .exe
+8. Finally replace the original .exe with the copy (or keep it as a backup)
 
 # 10.好用的类
 运行时间
