@@ -91,15 +91,20 @@ if( in_Windows_Platform)
      Done!;
 }
 
+
 有逆向经验可以参考这篇 https://kosro.de/unity-dark-theme/
 1. Download x64dbg
 2. Create a copy of Unity.exe
 3. Open the original .exe in x64dbg
 4. Switch to the "Symbols" tab and select the "unity.exe" Module
+![imgae](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/Unity-Reverse-Step-1.jpg)
 5. Search for the Symbol "getskinidx" and double click the highlighted result
+![imgae](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/Unity-Reverse-Step-2.jpg)
 6. Find the highlighted lines (might start with "jne" or "je")
 Replace the "je" with "jne" or the other way around, depending on your Unity version
+![imgae](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/Unity-Reverse-Step-3.jpg)
 7. Create a patch using the highlighted icon and choose the copy of the .exe
+![imgae](https://github.com/Ferrarie/UnityStuff/blob/master/Texture/Unity-Reverse-Step-4.jpg)
 8. Finally replace the original .exe with the copy (or keep it as a backup)
 
 # 10.好用的类
