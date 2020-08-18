@@ -91,11 +91,11 @@ if( in_Windows_Platform)
      Done!;
 }
 
-注册表修改UserSkin值
-Windows Registry Editor Version 5.00
-
-[HKEY_CURRENT_USER\SOFTWARE\Unity Technologies\Unity Editor 5.x]
-"UserSkin_h307680651"=dword:00000001
+注册表修改UserSkin值  
+Windows Registry Editor Version 5.00  
+  
+[HKEY_CURRENT_USER\SOFTWARE\Unity Technologies\Unity Editor 5.x]  
+"UserSkin_h307680651"=dword:00000001  
 
 
 有逆向经验可以参考这篇 https://kosro.de/unity-dark-theme/
