@@ -1,14 +1,22 @@
- using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using System;
+using System.Collections;
+using System.Text;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 
-#region 强制窗口前置
+public class WindowUtility : MonoBehaviour
+{
+    #region 强制窗口前置
+
     enum ShowWindowCommands
     {
         /// <summary>
         /// Hides the window and activates another window.
         /// </summary>
         Hide = 0,
+
         /// <summary>
         /// Activates and displays a window. If the window is minimized or 
         /// maximized, the system restores it to its original size and position.
@@ -16,57 +24,68 @@ using System;
         /// for the first time.
         /// </summary>
         Normal = 1,
+
         /// <summary>
         /// Activates the window and displays it as a minimized window.
         /// </summary>
         ShowMinimized = 2,
+
         /// <summary>
         /// Maximizes the specified window.
         /// </summary>
         Maximize = 3, // is this the right value?
-                      /// <summary>
-                      /// Activates the window and displays it as a maximized window.
-                      /// </summary>       
+
+        /// <summary>
+        /// Activates the window and displays it as a maximized window.
+        /// </summary>       
         ShowMaximized = 3,
+
         /// <summary>
         /// Displays a window in its most recent size and position. This value 
         /// is similar to <see cref="Win32.ShowWindowCommand.Normal"/>, except 
         /// the window is not activated.
         /// </summary>
         ShowNoActivate = 4,
+
         /// <summary>
         /// Activates the window and displays it in its current size and position. 
         /// </summary>
         Show = 5,
+
         /// <summary>
         /// Minimizes the specified window and activates the next top-level 
         /// window in the Z order.
         /// </summary>
         Minimize = 6,
+
         /// <summary>
         /// Displays the window as a minimized window. This value is similar to
         /// <see cref="Win32.ShowWindowCommand.ShowMinimized"/>, except the 
         /// window is not activated.
         /// </summary>
         ShowMinNoActive = 7,
+
         /// <summary>
         /// Displays the window in its current size and position. This value is 
         /// similar to <see cref="Win32.ShowWindowCommand.Show"/>, except the 
         /// window is not activated.
         /// </summary>
         ShowNA = 8,
+
         /// <summary>
         /// Activates and displays the window. If the window is minimized or 
         /// maximized, the system restores it to its original size and position. 
         /// An application should specify this flag when restoring a minimized window.
         /// </summary>
         Restore = 9,
+
         /// <summary>
         /// Sets the show state based on the SW_* value specified in the 
         /// STARTUPINFO structure passed to the CreateProcess function by the 
         /// program that started the application.
         /// </summary>
         ShowDefault = 10,
+
         /// <summary>
         ///  <b>Windows 2000/XP:</b> Minimizes a window, even if the thread 
         /// that owns the window is not responding. This flag should only be 
@@ -74,12 +93,15 @@ using System;
         /// </summary>
         ForceMinimize = 11
     }
+
     //关闭窗口
     [DllImport("user32.dll")]
     static extern bool ShowWindowAsync(IntPtr hWnd, ShowWindowCommands showWindowCommands);
+
     //获取class 或者 name
     [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
     static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
     [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
     static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
@@ -100,37 +122,107 @@ using System;
 
     [DllImport("user32.dll")]
     static extern IntPtr SetWindowLong(IntPtr hwnd, int _nIndex, int dwNewLong);
+
+    /// <summary>  </summary>
+    /// <param name="hWnd"></param>
+    /// <param name="hWndInsertAfter"></param>
+    /// <param name="X">窗口左侧在屏幕的水平坐标</param>
+    /// <param name="Y">窗口顶部在屏幕的竖直坐标</param>
+    /// <param name="cx">窗口宽度</param>
+    /// <param name="cy">窗口高度</param>
+    /// <param name="uFlags">窗口属性：如最小化，最大化，等</param>
+    /// <returns></returns>
     [DllImport("user32.dll")]
     static extern bool SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+    private static bool _SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags)
+    {
+        bool result = SetWindowPos(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags);
+        if (result) Debug.Log("强制窗口最前");
+        else Debug.LogWarning("强制窗口最前失败");
+        return result;
+    }
+
     const uint SWP_SHOWWINDOW = 0x0040;
-    const uint SWP_HIDEWINDOW = 0x0080;//这个有毒
+    const uint SWP_HIDEWINDOW = 0x0080; //这个有毒
     const int GWL_STYLE = -16;
     const int WS_BORDER = 1;
-#endregion
 
-//通过获取当前激活的窗口(最前的)的句柄，让该句柄的窗口前置
-void  Anti_RoguishWindow(){
+    #endregion
 
+    /// <summary> 窗口类型 </summary>
+    enum WinType
+    {
+        /// <summary> 无边框窗口 </summary>
+        NoBorder,
+
+        /// <summary> 全屏 </summary>
+        FullScreen
+    }
+
+    [SerializeField, Header("窗口宽度")] private int winWidth;
+    [SerializeField, Header("窗口高度")] private int winHeight;
+
+    [SerializeField, Header("窗口在屏幕左侧位置")] private int x = 0;
+    [SerializeField, Header("窗口在屏幕顶部位置")] private int y = 0;
+
+    [SerializeField, Header("窗口类型")] private WinType winType = WinType.NoBorder;
+
+    /// <summary> 重复设置窗口前置间隔，间隔过小会影响性能 </summary>
+    private const float setUpCd = 3f;
+
+    private WaitForSecondsRealtime waitForSecondsRealtime;
+
+    private IEnumerator Start()
+    {
+        switch (winType)
+        {
+            case WinType.NoBorder:
+                Screen.SetResolution(Screen.width, Screen.height, false); //无边框窗口
+                break;
+            case WinType.FullScreen:
+                Screen.SetResolution(Screen.width, Screen.height, true); //全屏
+                break;
+        }
+
+        waitForSecondsRealtime = new WaitForSecondsRealtime(setUpCd);
+        while (true)
+        {
+            NoRoguishWindow(winWidth, winHeight, x, y);
+            yield return waitForSecondsRealtime;
+        }
+    }
+
+
+    /// <summary>
+    /// 通过获取当前激活的窗口(最前的)的句柄，让该句柄的窗口前置
+    /// </summary>
+    public static void NORoguishWindow()
+    {
         //强制最前
         SetWindowLong(GetForegroundWindow(), GWL_STYLE, WS_BORDER);
-        bool result = SetWindowPos(GetForegroundWindow(), -1, 0, 0, (int)Screen.width, (int)Screen.height, SWP_SHOWWINDOW);
-        UnityEngine.Debug.Log("强制窗口最前"+result);
-}
+        SetWindowPos(GetForegroundWindow(), -1, 0, 0, (int)Screen.width, (int)Screen.height, SWP_SHOWWINDOW);
+    }
 
-//通过查找窗口名来获取句柄，让该句柄的窗口前置
-void Anti_RoguishWindow_By_WindowName(string ProductName){
+
+    /// <summary>
+    /// 通过查找窗口名来获取句柄，让该句柄的窗口前置
+    /// </summary>
+    public static void NoRoguishWindow(int screenWidth, int screenHeight, int x, int y)
+    {
         string className = "UnityWndClass";
-
-        //在Unity Build Settings里的Project Settings的Product Name参数。
-        string windowName = ProductName;
+        string windowName = Application.productName; //在Unity Build Settings里的Project Settings的Product Name参数。
         IntPtr 目标窗口 = FindWindow(className, windowName);
+
         if (目标窗口.ToInt32() == 0)
         {
-            Debug.Log("[查找窗口失败]" + "className:" + className + " windowName:" + windowName);
+            Debug.LogWarning("[查找窗口失败]" + "className:" + className + " windowName:" + windowName);
         }
         else
         {
             SetWindowLong(目标窗口, GWL_STYLE, WS_BORDER); //强制最前
-            SetWindowPos(目标窗口, -1, 0, 0, ScreenWidth, ScreenHeight, SWP_SHOWWINDOW);
+            //_SetWindowPos(目标窗口, -1, 0, 0, screenWidth, screenHeight, SWP_SHOWWINDOW);
+            _SetWindowPos(目标窗口, -1, x, y, screenWidth, screenHeight, 32 | 64);
         }
+    }
 }
